@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Amizade | SignalR</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container well">
+        <ul id="messages"></ul>
+    </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+        <br>
+        <div class="container">
+            <div class="col-md-10">
+                <input type="text"
+                       class="form-control"
+                       id="text-message"
+                       placeholder="Digite uma mensagem" />
+            </div>
+            <div class="col-md-2">
+                <button id="send-button"
+                        class="btn btn-primary btn-lg" >
+                    Enviar
+                </button>
+            </div>
+        </div>
+        <br>
+    </nav>
+
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.connection.hub.url = "/signalr";
+            var chat = $.connection.chatHub;
+
+            chat.client.addMessage = function (message) {
+                $('#messages').append($('<li>').text(message));
+            };
+
+            $('#send-button').click(function () {
+                var message = $('#text-message').val();
+                chat.server.send(message);
+
+                $('#text-message').val("")
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>
